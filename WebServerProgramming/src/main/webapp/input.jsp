@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<td>관계</td>
-			<td><input type="text" name="txtAddress" size="50"></td>
+			<td><input type="text" name="txtRelation" size="20"></td>
 		</tr>
 		<tr>
 			<td colspan="2">
