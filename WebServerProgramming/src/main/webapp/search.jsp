@@ -1,40 +1,71 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<div align="center"></div>
-	<table border="1" width="800" height="300">
-		<tr height="20%">
-			<th width="10%">이름</th>
-			<th width="20%">폰번호</th>
-			<th width="25%">이메일</th>
-			<th width="35%">주소</th>
-			<th width="10%">관계</th>
-		</tr>
-		<tr align="center">
-			<td>정창형</td>
-			<td>010-9463-1585</td>
-			<td>jch1589@gmail.com</td>
-			<td>부산</td>
-			<td>본인</td>
-		</tr>
-		<tr align="center">
-			<td>홍길동</td>
-			<td>010-1111-1111</td>
-			<td>gdhong@gmail.com</td>
-			<td>서울</td>
-			<td>친구</td>
-		</tr>
-	</table>
-	<nav>
-		<ul>
-			<li><a href="index.jsp">홈으로</a></li>
-		</ul>
-	</nav>
-</body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.sql.*" %>
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>명함 검색</title>
+	</head>
+
+	<body>
+		<h1>명함 검색</h1>
+		<form action="search.jsp" method="post">
+			<input type="text" name="keyword" placeholder="검색어 입력">
+			<input type="submit" value="검색">
+		</form>
+		<%
+		// OracleXE 연결
+		String url="jdbc:oracle:thin:@localhost:1521:xe";
+		String user="system";
+		String password="1234";
+		
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection conn=DriverManager.getConnection(url, user, password);
+
+		// 검색어 처리
+		String keyword = request.getParameter("keyword");
+
+		// SQL 쿼리 작성
+		String sql="SELECT * FROM namecard";
+		if (keyword !=null && !keyword.isEmpty()) {
+			sql +=" WHERE name LIKE '%" + keyword + "%' OR telno LIKE '%" + keyword	+ "%' OR mail LIKE '%" + keyword + "%'";
+		}
+		
+		// Statement 생성 및 실행
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		// 검색 결과 출력
+		%>
+		<table border="1">
+			<tr>
+				<th>순번</th>
+				<th>이름</th>
+				<th>폰번호</th>
+				<th>메일</th>
+			</tr>
+			<% 
+			int count=1;
+			while(rs.next()) {
+				%>
+				<tr>
+					<td><%= count++ %></td>
+					<td><%= rs.getString("name") %></td>
+					<td><%= rs.getString("telno") %></td>
+					<td><%= rs.getString("mail") %></td>
+				</tr>
+				<%
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+			%>
+		</table>
+		<nav>
+			<ul>
+				<li><a href="index.jsp">홈으로</a></li>
+			</ul>
+		</nav>
+	</body>
+
+	</html>
