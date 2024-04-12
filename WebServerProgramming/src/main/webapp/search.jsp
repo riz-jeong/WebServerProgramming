@@ -5,6 +5,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>명함 검색</title>
+	<%
+		// 입력값 변수
+		String keyword = request.getParameter("keyword");
+
+		// OracleXE 연결 정보
+		String url="jdbc:oracle:thin:@localhost:1521:xe";
+		String user="system";
+		String password="1234";
+
+		Connection conn = null;
+		Statement stmt = null;
+	%>
 </head>
 
 <body>
@@ -14,18 +26,11 @@
 		<input type="submit" value="검색">
 	</form>
 	<%
-	// OracleXE 연결
-	String url="jdbc:oracle:thin:@localhost:1521:xe";
-	String user="system";
-	String password="1234";
-	
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-	
 	try{
-		Connection conn=DriverManager.getConnection(url, user, password);
+		Class.forName("oracle.jdbc.driver.OracleDriver");
 
-		// 검색어 처리
-		String keyword = request.getParameter("keyword");
+		// DB 연결
+		conn = DriverManager.getConnection(url, user, password);
 
 		// SQL 쿼리 작성
 		String sql="SELECT * FROM namecard";
@@ -34,9 +39,9 @@
 		}
 		
 		// Statement 생성 및 실행
-		Statement stmt = conn.createStatement();
+		stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
-		
+
 		// 검색 결과 출력
 		%>
 		<table border="1">
@@ -58,15 +63,16 @@
 				</tr>
 				<%
 			}
-			// 데이터베이스 연결 닫기
-			rs.close();
-			stmt.close();
-			conn.close();
+		rs.close();
 	} catch(Exception e){
 		// 오류 처리 코드
 		e.printStackTrace();
+	} finally {
+		// DB 연결 종료
+		if (stmt != null) stmt.close();
+		if (conn != null) conn.close();
 	}
-		%>
+	%>
 	</table>
 	<nav>
 		<ul>
