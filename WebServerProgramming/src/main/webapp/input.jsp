@@ -61,6 +61,7 @@
 		}
 	}
 	%>
+	<h1>명함 입력</h1>
 	<form action="<%= request.getRequestURI() %>" method="post">
 		<table border="1">
 			<tr>
