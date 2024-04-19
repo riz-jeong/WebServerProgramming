@@ -64,19 +64,19 @@
 		<table border="1">
 			<tr>
 				<td>아이디</td>
-				<td><input type="number" name="txtId" value="" required></td>
+				<td><input type="number" name="txtId" required></td>
 			</tr>
 			<tr>
 				<td>이름</td>
-				<td><input type="text" name="txtName" value="" required></td>
+				<td><input type="text" name="txtName" required></td>
 			</tr>
 			<tr>
 				<td>폰번호</td>
-				<td><input type="text" name="txtTelNo" value="" required></td>
+				<td><input type="text" name="txtTelNo" required></td>
 			</tr>
 			<tr>
 				<td>이메일</td>
-				<td><input type="email" name="txtEmail" value="" required></td>
+				<td><input type="email" name="txtEmail" required></td>
 			</tr>
 		</table>
 		<br/>
