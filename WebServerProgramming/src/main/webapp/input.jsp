@@ -4,25 +4,24 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>명함 관리 - 입력</title>
-	<%
-		// 입력값 변수
-		String id = request.getParameter("txtId");
-		String name = request.getParameter("txtName");
-		String telNo = request.getParameter("txtTelNo");
-		String email = request.getParameter("txtEmail");
-
-		// OracleXE 연결 정보
-		String url="jdbc:oracle:thin:@localhost:1521:xe";
-		String user="system";
-		String password="1234";
-
-		Connection conn = null;
-		Statement stmt = null;
-	%>
+	<title>명함 입력</title>
 </head>
 <body>
 	<%
+	// 입력값 변수
+	String id = request.getParameter("txtId");
+	String name = request.getParameter("txtName");
+	String telNo = request.getParameter("txtTelNo");
+	String email = request.getParameter("txtEmail");
+
+	// OracleXE 연결 정보
+	String url="jdbc:oracle:thin:@localhost:1521:xe";
+	String user="system";
+	String password="1234";
+
+	Connection conn = null;
+	Statement stmt = null;
+
 	if (id != null && !id.isEmpty()) {
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -31,7 +30,6 @@
 			conn = DriverManager.getConnection(url, user, password);
 
 			// SQL 쿼리
-
 			String sql="INSERT INTO namecard VALUES('" + id + "','" + name + "','" + telNo + "','" + email + "')";
 
 			// Statement 객체 생성 및 SQL 쿼리 실행

@@ -5,27 +5,26 @@
 <head>
 	<meta charset="UTF-8">
 	<title>명함 검색</title>
-	<%
-		// 입력값 변수
-		String keyword = request.getParameter("keyword");
-
-		// OracleXE 연결 정보
-		String url="jdbc:oracle:thin:@localhost:1521:xe";
-		String user="system";
-		String password="1234";
-
-		Connection conn = null;
-		Statement stmt = null;
-	%>
 </head>
-
 <body>
 	<h1>명함 검색</h1>
-	<form action="search.jsp" method="post">
+	<form action="<%= request.getRequestURI() %>" method="post">
 		<input type="text" name="keyword" placeholder="검색어 입력">
 		<input type="submit" value="검색">
 	</form>
 	<%
+	// 입력값 변수
+	String keyword = request.getParameter("keyword");
+
+	// OracleXE 연결 정보
+	String url="jdbc:oracle:thin:@localhost:1521:xe";
+	String user="system";
+	String password="1234";
+
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+
 	try{
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
@@ -37,10 +36,10 @@
 		if (keyword !=null && !keyword.isEmpty()) {
 			sql +=" WHERE name LIKE '%" + keyword + "%' OR telno LIKE '%" + keyword + "%' OR mail LIKE '%" + keyword + "%'";
 		}
-		
+
 		// Statement 생성 및 실행
 		stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
+		rs = stmt.executeQuery(sql);
 
 		// 검색 결과 출력
 		%>
@@ -51,7 +50,7 @@
 				<th>폰번호</th>
 				<th>메일</th>
 			</tr>
-			<% 
+			<%
 			int count=1;
 			while(rs.next()) {
 				%>
@@ -63,12 +62,12 @@
 				</tr>
 				<%
 			}
-		rs.close();
 	} catch(Exception e){
 		// 오류 처리 코드
 		e.printStackTrace();
 	} finally {
 		// DB 연결 종료
+		if (rs != null) rs.close();
 		if (stmt != null) stmt.close();
 		if (conn != null) conn.close();
 	}
